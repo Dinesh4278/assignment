@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  frontend:
+    image: frontend:v1
+    build:
+      context: ./Techdome-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  backend:
+    image: backend:v1
+    build:
+      context: ./Techdome-backend
+    environment:
+      - DATABASE_URL=mysql://db_user:db_pass@db/db_name
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_name
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: db_pass
+    ports:
+      - "3306:3306"
+
+volumes:
+  db_data:
+    driver: local
